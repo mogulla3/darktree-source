@@ -54,32 +54,78 @@ GETの際に `Range` ヘッダでリソースの範囲をバイトで指定す�
 
 リクエストしたURIが存在しなかったので、クライアントはLocationヘッダが示す別のURLにメソッドを変えずにリクエストを再送信する必要があることを示す。
 このステータスコードを正しく実装しているブラウザはほとんどない。"
-400,Bad Request
-401,Unauthorized
-402,Payment Required
-403,Forbidden
-404,Not Found
-405,Method Not Allowed
-406,Not Acceptable
-407,Proxy Authentication Required
-408,Request Timeout
-409,Conflict
-410,Gone
-411,Length Required
-412,Precondition Failed
-413,Payload Too Large
-414,URI Too Long
-415,Unsupported Media Type
-416,Range Not Satisfiable
-417,Expectation Failed
-500,Internal Server Error
-501,Not Implemented
-502,Bad Gateway
-503,Service Unavailable
-504,Gateway Timeout
-505,HTTP Version Not Supported
-506,Variant Also Negotiates
-507,Insufficient Storage
-508,Loop Detected
-509,Bandwidth Limit Exceeded
-510,Not Extended
+400,"Bad Request
+
+リクエストの構文が間違えていることを示す。また、ほかの4xx系エラーコードに適さないエラーの場合にも利用する。"
+401,"Unauthorized
+
+適切な認証情報を持たずにリソースにアクセスしようとしたことを示す。レスポンスには `WWW-Authenticate` ヘッダが含まれ、そこで認証方式を指定する。"
+402,"Payment Required
+
+このリソースを操作するには料金が必要であることを示す。このステータスコードは実際には利用されていない。"
+403,"Forbidden
+
+401 Unauthorized はクライアントが適切な認証情報を提示しなかったことを示すが、403 Forbiddenはそれ以外の理由でリソースを操作できないことを示す。例えば、IPアドレスのみからアクセスできる場合などに用いられる。"
+404,"Not Found
+
+指定したリソースが見つからなかったことを示す"
+405,"Method Not Allowed
+
+リクエストしたURIが指定したメソッドをサポートしていないことを示す。レスポンスには `Allow` ヘッダが含まれ、このURIがサポートしているメソッドの一覧が示される。"
+406,"Not Acceptable
+
+クライアントが `Accept-*` ヘッダで指定した表現が返せないことを示す。
+レスポンスボディには 300 Multiple Choices と同様にサーバで用意できる選択肢の一覧が入る。"
+407,"Proxy Authentication Required
+
+プロキシ認証が必要であることを示す。レスポンスの `Proxy-Authenticate` ヘッダには認証方式が入る。クライアントはその認証方式に従って `Proxy-Authorization` ヘッダに認証情報を入れてリクエストを再送信する。"
+408,"Request Timeout
+
+クライアントがリクエストをいつまでたっても送信しきらないため、サーバ側でタイムアウトしたことを示す。"
+409,"Conflict
+
+リクエストが要求したリソースに対する操作が、リソースの現在の状態と矛盾していることを示す。例えば空ではないディレクトリを削除しようとしたり、リソースの名前を既にほかで使われているものに変更しようとした場合など、他のリソースと強豪する状態であるときに利用する。"
+410,"Gone
+
+このリソースが以前は存在したが、現在は存在しないことを示す。期間限定のプロモーションサイトなどで利用することを意図している。"
+411,"Length Required
+
+クライアントが `Content-Length` ヘッダを送信しなければならないことを示す。
+クライアントは `Content-Length` ヘッダを入れればリクエストを再送信できる。"
+412,"Precondition Failed
+
+条件付きリクエストでクライアントが指定した事前条件が、サーバ側で合わないことを示す。楽観的ロックで利用する。"
+413,"Payload Too Large
+
+サーバが処理できないほどリクエストメッセージが巨大であることを示す。サーバはクライアントからの接続を切断する。"
+414,"URI Too Long
+
+サーバが処理できないほどリクエストのURIが長すぎることを示す"
+415,"Unsupported Media Type
+
+クライアントが指定したメディアタイプをサーバがサポートしていないことを示す。例えば画像登録Web APIなどで、サーバがサポートする画像形式がjpegとpngだけなのに、クライアントがgif形式の画像を登録しようとしたときなどに用いる"
+416,"Range Not Satisfiable
+
+クライアントがRangeヘッダで指定した範囲が、リソースのサイズとあっていないことを示す。"
+417,"Expectation Failed
+
+クライアントが指定したExpectヘッダをサーバが理解できないことを示す"
+500,"Internal Server Error
+
+サーバ側でエラーが発生したことを示す。また、他の5xx系エラーに適さないエラーの場合にも利用する。"
+501,"Not Implemented
+
+リクエストされたメソッドを、このURIでサーバが実装していないことを示す。
+WebAPI等の仕様上は実装されるべきメソッドとして定義されているにも関わらず、諸般の都合でサーバが実装していない場合に返る。"
+502,"Bad Gateway
+
+プロキシが上流サーバにリクエストを送ったものの、処理が正常に終了しなかったことを示す。"
+503,"Service Unavailable
+
+メンテナンスなどでサービスを提供できないことを示す。レスポンスの `Retry-After` ヘッダでサービス再開時期を通知することもできる。"
+504,"Gateway Timeout
+
+プロキシが上流サーバにリクエストを送ったものの、接続できなかったことを示す。"
+505,"HTTP Version Not Supported
+
+クライアントが送信したリクエストのHTTPバージョンを、サーバがサポートしていないことを示す"
