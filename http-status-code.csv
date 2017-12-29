@@ -1,24 +1,59 @@
 front,back
-100,Continue
-101,Switching Protocol
-102,Processing
-200,OK
-201,Created
-202,Accepted
-203,Non-Authorative Information
-204,No Content
-205,Reset Content
-206,Partial Content
-207,Multi-Status
-208,Already Reported
-300,Multiple Choices
-301,Moved Permanently
-302,Found
-303,See Other
-304,Not Modified
-305,Use Proxy
-307,Temporary Redirect
-308,Permanent Redirect
+100,"Continue
+
+Expectヘッダに `100-continue` という値をいれてリクエストするとリクエストヘッダを送りきった時点でサーバが `100 Continue` を返す。これにより無駄に巨大なリクエストを送信しなくて済むようになる。"
+101,"Switching Protocols
+
+利用するプロトコルをHTTP1.1からアップグレードするときに用いる。Upgradeヘッダには利用できるプロトコルが入る。"
+200,"OK
+
+リクエストが成功したことを示す"
+201,"Created
+
+リクエストが成功し、新しいリソースを作成したことを示す。リクエストがPOSTだった場合、Locationヘッダには新しいリソースのURIが絶対URIで入る。"
+202,"Accepted
+
+クライアントからのリクエストは受け入れられたものの、サーバ側で処理が完了していないことを示す。典型的にはPOSTやPUTでリソースを作成・更新したときに、その処理に非常に時間がかかりそうな場合に返す。"
+203,"Non-Authoritative Information
+
+レスポンスヘッダがオリジナルのサーバから提供されたものではないことを示す。例えば、そのリソースについてプロキシが注釈をヘッダで与えた場合などに利用する。"
+204,"No Content
+
+リクエストが成功したものの、クライアントに返すコンテンツが無いことを示す。典型的にはDELETEへのレスポンスやAjaxで処理を行った場合などに利用する。"
+205,"Reset Content
+
+リクエストが成功したので、ブラウザの画面をリセットして次の入力動作に移れることを示す。例えば、帳票入力フォームをブラウザで表示しているときにこのステータスコードが返ったら、ブラウザは全ての入力項目をリセットして再入力が簡単にできる状態にする"
+206,"Partial Content
+
+GETの際に `Range` ヘッダでリソースの範囲をバイトで指定すると、リソースの一部だけを取得できる。これを部分的GETと呼ぶ。
+このステータスコードは、部分的GETが成功したことを示す。レスポンスの `Content-Range` ヘッダには `Range` ヘッダで指定した部分が入る。"
+207,"Multi-Status
+
+（WebDAV関連のため保留）"
+300,"Multiple Choices
+
+指定したURIに対してコンテントネゴシエーションを行った結果、サーバ側では候補を絞りきれなかったときに、クライアントに複数の候補へのリンクを返すために用いる。"
+301,"Moved Permanently
+
+指定したリソースが新しいURIに移動したことを示す。移動先のURIはLocationヘッダで示す。"
+302,"Found
+
+仕様上は、リクエストしたURIが存在しなかったので、クライアントはLocationヘッダが示す別のURIにメソッドを変えずにリクエストを再送信する必要があることを示す。ただし、実際のWebサービスでは `303 See Other` の用途で使われていた。
+本来の `302 Found` の意味のステータスコードは `307 Temporary Redirected` として再定義されたため、このステータスコードは現在非推奨となっている。"
+303,"See Other
+
+リクエストに対する処理結果がLocationヘッダで示されるURIからGETで取得できることを示す。典型的には、ブラウザのフォームからPOSTで処理を行ったレスポンスとして、結果画面にリダイレクトするときに使う。"
+304,"Not Modified
+
+条件付きGETのときに、リソースが更新されていなかったことを示す"
+305,"Use Proxy
+
+このリソースにアクセスするためには、指定されたプロキシを通す必要があることを示す。
+レスポンスの `Location` ヘッダにプロキシのURIが入る。"
+307,"Temporary Redirect
+
+リクエストしたURIが存在しなかったので、クライアントはLocationヘッダが示す別のURLにメソッドを変えずにリクエストを再送信する必要があることを示す。
+このステータスコードを正しく実装しているブラウザはほとんどない。"
 400,Bad Request
 401,Unauthorized
 402,Payment Required
